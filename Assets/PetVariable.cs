@@ -13,7 +13,7 @@ public class PetVariable : MonoBehaviour
     public float value = 0f;
 
     [Tooltip("The minimum allowed value for this variable.")]
-    public float minValue = 0f;
+    public float minValue = -100f;
 
     [Tooltip("The maximum allowed value for this variable.")]
     public float maxValue = 100f;
@@ -80,13 +80,29 @@ public class PetVariable : MonoBehaviour
             {
                 int steps = Mathf.FloorToInt(currentTime);
                 currentTime -= steps;
-                SetValue(value + changePerSecond * steps);
+                if (value > 0)
+                {
+                    SetValue(value - changePerSecond * steps);
+                }
+                else if (value < 0)
+                {
+                    SetValue(value + changePerSecond * steps);
+                }
             }
         }
         else
         {
             // Continuous update: smooth change per frame
-            SetValue(value + changePerSecond * Time.deltaTime);
+
+            if (value > 0)
+            {
+                SetValue(value - changePerSecond * Time.deltaTime);
+            }
+            else if (value < 0) 
+            {
+                SetValue(value + changePerSecond * Time.deltaTime);
+
+            }
         }
     }
 
